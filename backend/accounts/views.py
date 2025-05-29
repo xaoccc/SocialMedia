@@ -17,6 +17,11 @@ class GoogleLogin(SocialLoginView):
     callback_url = settings.GOOGLE_OAUTH_CALLBACK_URL
     client_class = OAuth2Client
 
+# debug
+# def post(self, request, *args, **kwargs):
+#     print("Received code:", request.data.get("code"))
+#     return super().post(request, *args, **kwargs)
+
 class GoogleLoginCallback(APIView):
     def get(self, request, *args, **kwargs):
         """
@@ -26,6 +31,8 @@ class GoogleLoginCallback(APIView):
         """
 
         code = request.GET.get("code")
+
+        
 
         if code is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
