@@ -9,6 +9,7 @@ const appRoutes = {
     CONTACT: '/contact',
     GOOGLE_CALLBACK: '/google/callback',
     UNKNOWN: '*',
+    EMAILVERIFICATION: '/confirm-email/:key'
 }
 
 export default appRoutes;

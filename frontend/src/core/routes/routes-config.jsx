@@ -8,6 +8,7 @@ import About from "../../components/About.jsx";
 import Contact from "../../components/Contact.jsx";
 import NotFound from "../../components/NotFound.jsx";
 import GoogleCallback from "../../components/GoogleCallback.jsx";
+import ConfirmEmail from '../../components/ConfirmEmail.jsx';
 import { handleGoogleCallback } from '../../loader.js';
 
 const routesConfig = [
@@ -46,6 +47,10 @@ const routesConfig = [
     {
         path: appRoutes.UNKNOWN,
         element: <NotFound />
+    },
+    {
+        path: appRoutes.EMAILVERIFICATION,
+        element: <ConfirmEmail />
     },
     {
         path: appRoutes.GOOGLE_CALLBACK,
