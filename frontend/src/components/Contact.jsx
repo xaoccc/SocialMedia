@@ -9,7 +9,7 @@ const Contact = () => {
     }, [jwtData]);
 
     return (
-        <section>
+        <section className="container">
             <NavBar />
             {jwtData ? (
                 <div className="contact">

@@ -13,7 +13,7 @@ const Home = () => {
     }, [jwtData]);
 
     return (
-        <section>
+        <section className="container">
             <NavBar />
             {jwtData ? (
                 <h2>Welcome, {(!jwtData.user.first_name) ? jwtData.user.username : jwtData.user.first_name}!</h2>

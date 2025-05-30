@@ -56,7 +56,7 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     required 
                 />
-                <button type="submit" disabled={loading}>
+                <button type="submit" className="login-btn" disabled={loading}>
                     {loading ? 'Logging in...' : 'Log in'}
                 </button>
             </form>

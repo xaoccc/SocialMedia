@@ -59,7 +59,7 @@ export default function Register() {
                     onChange={(e) => setPassword2(e.target.value)}
                     required
                 />
-                <button>Register</button>
+                <button className="register-btn">Register</button>
             </form>
         </section>
     );
