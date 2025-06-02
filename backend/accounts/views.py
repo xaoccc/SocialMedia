@@ -10,6 +10,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import render
 from django.views import View
+from django.contrib.auth import get_user_model
+
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ProfileSerializer
+from .models import Profile
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -39,7 +44,7 @@ class GoogleLoginCallback(APIView):
         return Response(response.json(), status=status.HTTP_200_OK)
 
 class LoginPage(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):        
         return render(
             request,
             "pages/login.html",
@@ -48,3 +53,15 @@ class LoginPage(View):
                 "google_client_id": settings.GOOGLE_OAUTH_CLIENT_ID,
             },
         )
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        try:
+            profile = Profile.objects.get(user=request.user)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        except Profile.DoesNotExist:
+            return Response({"error": "Profile not found"}, status=404)
+

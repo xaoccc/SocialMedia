@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path
 from allauth.account.views import ConfirmEmailView
-from accounts.views import LoginPage, GoogleLogin, GoogleLoginCallback
+from accounts.views import LoginPage, GoogleLogin, GoogleLoginCallback, ProfileView
 from dj_rest_auth.registration.views import VerifyEmailView
 
 
@@ -18,6 +18,7 @@ urlpatterns = [
     ),
     path("api/v1/auth/registration/", include("dj_rest_auth.registration.urls")),
     path("api/v1/auth/google/", GoogleLogin.as_view(), name="google_login"),
+    path("api/v1/auth/profile/", ProfileView.as_view(), name="profile_data"),
     path(
         "api/v1/auth/google/callback/",
         GoogleLoginCallback.as_view(),

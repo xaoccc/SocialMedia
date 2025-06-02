@@ -10,6 +10,7 @@ import NotFound from "../../components/NotFound.jsx";
 import GoogleCallback from "../../components/GoogleCallback.jsx";
 import ConfirmEmail from '../../components/ConfirmEmail.jsx';
 import { handleGoogleCallback } from '../../loader.js';
+import { userData } from '../userData.js';
 
 const routesConfig = [
     {
@@ -34,6 +35,7 @@ const routesConfig = [
     },
     {
         path: appRoutes.HOME,
+        loader: userData,
         element: <Home />
     },
     {
