@@ -56,6 +56,7 @@ class LoginPage(View):
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
+    
 
     def get(self, request):
         try:

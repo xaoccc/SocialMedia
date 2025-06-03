@@ -2,14 +2,11 @@ import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import NavBar from './NavBar.jsx'; 
 
-import { useLoaderData, useNavigate } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 
 const Home = () => {
     const { jwtData } = useAuth();
-
-    const userProfile = useLoaderData();
-
-    
+    const userProfile = useLoaderData();    
 
     useEffect(() => {
     }, [jwtData]);

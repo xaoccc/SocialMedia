@@ -23,8 +23,6 @@ export default function Login() {
         try {
             const data = await loginUser(email, password); // Call the API
             setJwtData(data);
-            // Debug
-            console.log(data);
             navigate(appRoutes.HOME);
         }
 
