@@ -43,7 +43,9 @@ A self-descriptive app, focused on using google auth using Django and React
 
 
 notes to self:
-- create comment component, comment model and comment view
+- create comment component, comment model, comment view and comment url
+- in userData.js create a second api call to fetch the comments data
+- The data from both api calls should be stored in two different variables, so we can use it in Home and Comment components
 - Create comment structure in react way!
 - the same with reply
 - comment component will be displayed in the home page here, maybe using map: <section class="comments">
