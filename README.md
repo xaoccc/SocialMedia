@@ -42,7 +42,11 @@ A self-descriptive app, focused on using google auth using Django and React
     - Run the front-end server: `npm run dev` 
 
 
-Notes: OAUTH 2.0 is alrady avilable, so in future the app should use OUATH 2.0
+notes to self:
+- create comment component, comment model and comment view
+- Create comment structure in react way!
+- the same with reply
+- comment component will be displayed in the home page here, maybe using map: <section class="comments">
 
 
 
