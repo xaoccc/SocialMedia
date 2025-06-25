@@ -1,19 +1,52 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import NavBar from './NavBar.jsx';
 import '../reset.css';
 import '../styles.css';
 import { useLoaderData } from 'react-router-dom';
+import Comment from './Comment.jsx';
 
 const Home = () => {
     const { jwtData } = useAuth();
     const userProfile = useLoaderData();
+
+    const [newCommentContent, setNewCommentContent] = useState('');
 
     useEffect(() => {
     }, [jwtData]);
 
     useEffect(() => {
     }, [userProfile]);
+
+    const handleNewComment = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch('http://localhost:8000/comments/add/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    content: newCommentContent
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            }
+
+            const data = await response.json();
+            console.log('Comment added:', data);
+            setNewCommentContent('');
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <section className="container">
@@ -27,40 +60,20 @@ const Home = () => {
             )}
 
             <section class="comments">
-                <div class="comment-wrapper flex-row">
-                    <div class="rating-wrapper">
-                        <button>
-                            <img src="./images/icon-plus.svg" alt="plus icon" />
-                        </button>
-                        <div class="score">5</div>
-                        <button>
-                            <img src="./images/icon-minus.svg" alt="plus icon" />
-                        </button>
-                    </div>
-                    <article>
-                        <div class="comment-header flex-row">
-                            <div class="comment-header-left flex-row">
-                                <img class="profile-pic" src="" alt="" />
-                                <div class="profile-name"></div>
-                                <div class="date"></div>
-                            </div>
-                            <div class="comment-header-right flex-row">
-                                <div class="flex-row">
-                                    <img src="./images/icon-reply.svg" alt="reply icon" />
-                                    <a class="reply-txt">Reply</a>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="comment-body"></p>
-                    </article>
-                </div>
 
+                <Comment />
             </section>
-            <section class="new-comment flex-row">
+            <form class="new-comment flex-row" onSubmit={handleNewComment}>
                 <img src={userProfile.profile_picture_url} />
-                <textarea rows="4" name="" id="" placeholder="Add a comment..."></textarea>
+                <textarea
+                    rows="4"
+                    name="new-comment"
+                    id="new-comment"
+                    placeholder="Add a comment..."
+                    onChange={(e) => setNewCommentContent(e.target.value)}
+                ></textarea>
                 <button>SEND</button>
-            </section>
+            </form>
 
         </section>
     );

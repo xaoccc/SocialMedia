@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("login/", LoginPage.as_view(), name="login"),
     path('api/v1/auth/', include('dj_rest_auth.urls')),
+    path('comments/', include('comments.urls')),
     path("api/account-confirm-email/", VerifyEmailView.as_view(), name="account_email_verification"),
     re_path(r"^api/v1/auth/accounts/", include("allauth.urls")),
     re_path(
