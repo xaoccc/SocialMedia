@@ -48,6 +48,10 @@ const Home = () => {
         }
     }
 
+
+
+
+
     return (
         <section className="container">
             <NavBar />
@@ -59,10 +63,9 @@ const Home = () => {
                 <p>You are not logged in</p>
             )}
 
-            <section class="comments">
 
-                <Comment />
-            </section>
+            <Comment />
+
             <form class="new-comment flex-row" onSubmit={handleNewComment}>
                 <img src={userProfile.profile_picture_url} />
                 <textarea
