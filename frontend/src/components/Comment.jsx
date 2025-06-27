@@ -59,7 +59,7 @@ export default function Comment() {
                                 </div>
                             </div>
                         </div>
-                        <p className="comment-body">{comment.text || comment.body}</p>
+                        <p className="comment-body">{comment.content}</p>
                     </article>
                 </div>
             ))}
