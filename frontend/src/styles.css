@@ -31,7 +31,11 @@ main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 45.5rem;
+    width: 55%;
+}
+
+form.new-comment {
+    width: 55%;
 }
 
 .comment-wrapper > .flex-row, .comment-wrapper article {

@@ -1,32 +1,4 @@
-import React, { useEffect, useState } from 'react';
-export default function Comment() {
-
-    const [comments, setComments] = useState([]);
-    const showAllComments = async () => {
-        // e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8000/comments/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            if (!response.ok) {
-                console.error('Failed to fetch comments:', response.status);
-            } else {
-                const data = await response.json();
-                console.log('Comments:', data);
-                setComments(data);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        showAllComments();
-    }, []);
-
+export default function Comment({ comments }) {
     return (
         <div class="comment-wrapper">
             {comments.map((comment) => (
@@ -54,8 +26,8 @@ export default function Comment() {
                             </div>
                             <div className="comment-header-right flex-row">
                                 <div className="flex-row">
-                                    <img src="../../public/icon-reply.svg" alt="reply icon" />
-                                    <a className="reply-txt">Reply</a>
+                                    <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
+                                    <a className="reply-txt reply">Reply</a>
                                 </div>
                             </div>
                         </div>

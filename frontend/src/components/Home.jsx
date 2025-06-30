@@ -9,8 +9,8 @@ import Comment from './Comment.jsx';
 const Home = () => {
     const { jwtData } = useAuth();
     const userProfile = useLoaderData();
-
     const [newCommentContent, setNewCommentContent] = useState('');
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
     }, [jwtData]);
@@ -39,18 +39,37 @@ const Home = () => {
                 return;
             }
 
-            const data = await response.json();
-            console.log('Comment added:', data);
             setNewCommentContent('');
+            await showAllComments();
 
         } catch (error) {
             console.error(error);
         }
     }
 
+    const showAllComments = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/comments/', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (!response.ok) {
+                console.error('Failed to fetch comments:', response.status);
+            } else {
+                const data = await response.json();
+                console.log('Comments:', data);
+                setComments(data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
-
-
+    useEffect(() => {
+        showAllComments();
+    }, []);
 
     return (
         <section className="container">
@@ -62,9 +81,7 @@ const Home = () => {
             ) : (
                 <p>You are not logged in</p>
             )}
-
-
-            <Comment />
+            <Comment comments={comments} />
 
             <form class="new-comment flex-row" onSubmit={handleNewComment}>
                 <img src={userProfile.profile_picture_url} />
@@ -73,6 +90,7 @@ const Home = () => {
                     name="new-comment"
                     id="new-comment"
                     placeholder="Add a comment..."
+                    value={newCommentContent}
                     onChange={(e) => setNewCommentContent(e.target.value)}
                 ></textarea>
                 <button>SEND</button>
