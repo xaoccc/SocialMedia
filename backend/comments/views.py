@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from .models import Comment
+from .models import Comment, Like
 from .serializers import CommentSerializer
 from accounts.models import Profile  # Adjust if Profile is in another app
 
@@ -24,6 +24,26 @@ class AddNewComment(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class LikeComment(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        data = request.data.copy()
+        
+        like = Like.objects.filter(comment_id=data['comment_id']).filter(user_id=data['user_id'])
+        comment = Comment.objects.filter(id=data['comment_id'])
+        print(comment)
+        if like is None or like.count() == 0:
+            like = Like.objects.create(comment_id=data['comment_id'], user_id=data['user_id'])
+            comment.likes_count += 1
+            like.save()
+            comment.save()
+            return Response(data, status=status.HTTP_201_CREATED)
+        
+        return Response({"error": "Comment likes not updated. You can like a comment just once."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        
 
 class ShowAllComments(APIView):
     # permission_classes = [permissions.IsAuthenticated]

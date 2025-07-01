@@ -59,7 +59,6 @@ const Home = () => {
                 console.error('Failed to fetch comments:', response.status);
             } else {
                 const data = await response.json();
-                console.log('Comments:', data);
                 setComments(data);
             }
         } catch (error) {
@@ -81,9 +80,9 @@ const Home = () => {
             ) : (
                 <p>You are not logged in</p>
             )}
-            <Comment comments={comments} />
+            <Comment comments={comments} userProfile={userProfile} />
 
-            <form class="new-comment flex-row" onSubmit={handleNewComment}>
+            <form className="new-comment flex-row" onSubmit={handleNewComment}>
                 <img src={userProfile.profile_picture_url} />
                 <textarea
                     rows="4"

@@ -1,13 +1,51 @@
-export default function Comment({ comments }) {
+import React, { useEffect, useState } from "react";
+import { useAuth } from '../context/AuthContext';
+
+
+export default function Comment({ comments, userProfile }) {
+    const { jwtData } = useAuth();
+
+    useEffect(() => {
+    }, [jwtData]);
+
+
+    const handleLike = async (comment) => {
+        try {
+            const response = await fetch('http://localhost:8000/comments/like/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    comment_id: comment.id,
+                    user_id: userProfile.user
+                })
+            });
+            console.log(response);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
+
+
     return (
         <div class="comment-wrapper">
             {comments.map((comment) => (
                 <div key={comment.id} className="flex-row">
                     <div className="rating-wrapper">
-                        <button>
+                        <button onClick={() => handleLike(comment)}>
                             <img src="../../public/icon-plus.svg" alt="plus icon" />
                         </button>
-                        <div className="score">{comment.score || 0}</div>
+                        <div className="score">{comment.likes_count || 0}</div>
                         <button>
                             <img src="../../public/icon-minus.svg" alt="minus icon" />
                         </button>
@@ -37,5 +75,6 @@ export default function Comment({ comments }) {
             ))}
 
         </div>
-    );
-}
+    )
+};
+
