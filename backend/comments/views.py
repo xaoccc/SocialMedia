@@ -30,16 +30,17 @@ class LikeComment(APIView):
 
     def post(self, request):
         data = request.data.copy()
-        
+      
         like = Like.objects.filter(comment_id=data['comment_id']).filter(user_id=data['user_id'])
-        comment = Comment.objects.filter(id=data['comment_id'])
-        print(comment)
         if like is None or like.count() == 0:
-            like = Like.objects.create(comment_id=data['comment_id'], user_id=data['user_id'])
-            comment.likes_count += 1
-            like.save()
-            comment.save()
+            if data['action'] == 'like':
+                like = Like.objects.create(comment_id=data['comment_id'], user_id=data['user_id'])
+                like.save()
+                return Response(data, status=status.HTTP_201_CREATED)
+        elif (like is None or like.count() > 0) and data['action'] == 'unlike':
+            like.delete()
             return Response(data, status=status.HTTP_201_CREATED)
+
         
         return Response({"error": "Comment likes not updated. You can like a comment just once."}, status=status.HTTP_400_BAD_REQUEST)
         

@@ -80,7 +80,7 @@ const Home = () => {
             ) : (
                 <p>You are not logged in</p>
             )}
-            <Comment comments={comments} userProfile={userProfile} />
+            <Comment comments={comments} userProfile={userProfile} onCommentsUpdate={showAllComments} />
 
             <form className="new-comment flex-row" onSubmit={handleNewComment}>
                 <img src={userProfile.profile_picture_url} />

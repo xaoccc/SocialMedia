@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
 
 
-export default function Comment({ comments, userProfile }) {
+export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     const { jwtData } = useAuth();
 
     useEffect(() => {
     }, [jwtData]);
 
-
-    const handleLike = async (comment) => {
+    const handleLike = async (comment, action) => {
         try {
             const response = await fetch('http://localhost:8000/comments/like/', {
                 method: 'POST',
@@ -19,15 +18,19 @@ export default function Comment({ comments, userProfile }) {
                 },
                 body: JSON.stringify({
                     comment_id: comment.id,
-                    user_id: userProfile.user
+                    user_id: userProfile.user,
+                    action: action
                 })
             });
-            console.log(response);
 
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Error:', errorData);
                 return;
+            }
+
+            if (onCommentsUpdate) {
+                onCommentsUpdate();
             }
         } catch (error) {
             console.error(error);
@@ -42,11 +45,11 @@ export default function Comment({ comments, userProfile }) {
             {comments.map((comment) => (
                 <div key={comment.id} className="flex-row">
                     <div className="rating-wrapper">
-                        <button onClick={() => handleLike(comment)}>
+                        <button onClick={() => handleLike(comment, 'like')}>
                             <img src="../../public/icon-plus.svg" alt="plus icon" />
                         </button>
                         <div className="score">{comment.likes_count || 0}</div>
-                        <button>
+                        <button onClick={() => handleLike(comment, 'unlike')}>
                             <img src="../../public/icon-minus.svg" alt="minus icon" />
                         </button>
                     </div>
