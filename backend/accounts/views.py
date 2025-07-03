@@ -13,7 +13,7 @@ from django.views import View
 from django.contrib.auth import get_user_model
 
 from rest_framework.permissions import IsAuthenticated
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, UserSerializer
 from .models import Profile
 
 from dj_rest_auth.registration.views import RegisterView
@@ -82,3 +82,10 @@ class CustomRegisterView(RegisterView):
         profile.profile_picture_url='https://raw.githubusercontent.com/xaoccc/SocialMedia/refs/heads/main/frontend/public/no-profile.jpg'
         profile.save()
         return user
+    
+class AllUsersView(APIView):
+    def get(self, request, *args, **kwargs):
+        User = get_user_model()
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
