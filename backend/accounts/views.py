@@ -16,6 +16,10 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import ProfileSerializer
 from .models import Profile
 
+from dj_rest_auth.registration.views import RegisterView
+
+
+
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
     callback_url = settings.GOOGLE_OAUTH_CALLBACK_URL
@@ -66,3 +70,15 @@ class ProfileView(APIView):
         except Profile.DoesNotExist:
             return Response({"error": "Profile not found"}, status=404)
 
+# Override the RegisterView, so that we can create a new Profile object linked to the User object with a default profile picture url.
+class CustomRegisterView(RegisterView):
+    def perform_create(self, serializer):
+        # Custom logic here (e.g., logging, sending a custom email)
+        user = serializer.save(self.request)
+        User = get_user_model()
+        user_object = User.objects.get(username=user)
+      
+        profile = Profile.objects.get(user_id=user_object.id)
+        profile.profile_picture_url='https://raw.githubusercontent.com/xaoccc/SocialMedia/refs/heads/main/frontend/public/no-profile.jpg'
+        profile.save()
+        return user
