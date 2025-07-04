@@ -88,11 +88,18 @@ form.new-comment {
 .profile-name {
     color: hsl(212, 24%, 26%);
 }
-.reply-txt, .score, .reply-to {
+.reply-txt, .edit, .score, .reply-to {
     color: hsl(238, 40%, 52%);
     font-weight: 700;
 }
-.reply-txt, .comment-header-right img {
+.delete {
+    color: hsl(358, 79%, 66%);
+    font-weight: 700;
+}
+.delete, .edit {
+    gap: 1rem;
+}
+.reply-txt, .edit, .delete, .comment-header-right img {
     cursor: pointer;
 }
 
@@ -105,6 +112,10 @@ form.new-comment {
     color: hsl(358, 79%, 66%);
 
 }
+
+a:hover {
+        opacity: 0.5;
+    }
 .delete  {
     order: 1;
 }

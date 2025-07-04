@@ -38,6 +38,35 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
         }
     }
 
+    const handleDelete = async (comment) => {
+        try {
+            const response = await fetch('http://localhost:8000/comments/delete/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    comment_id: comment.id,
+                    user_id: userProfile.user,
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            }
+
+            if (onCommentsUpdate) {
+                onCommentsUpdate();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
     return (
         <div class="comment-wrapper">
             {comments.map((comment) => (
@@ -65,19 +94,23 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                             </div>
                             <div className="comment-header-right flex-row">
                                 <div className="flex-row">
-                                    {(userProfile.user == comment.user_id)                                    
-                                    ? <>
-                                        <img src="../../public/icon-delete.svg" className="delete" alt="delete icon" />
-                                        <a className="reply-txt delete">Delete</a>
-                                        <img src="../../public/icon-edit.svg" className="edit" alt="edit icon" />
-                                        <a className="reply-txt edit">Edit</a>
-                                      </>
-                                    :  <>
-                                        <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
-                                        <a className="reply-txt reply">Reply</a>
-                                      </>                                    
-                                    }                              
-                                    
+                                    {(userProfile.user == comment.user_id)
+                                        ? <>
+                                            <div className="delete flex-row" onClick={() => handleDelete(comment)}>
+                                                <img src="../../public/icon-delete.svg" alt="delete icon" />
+                                                <a className="delete-txt delete">Delete</a>
+                                            </div>
+                                            <div className="edit flex-row">
+                                                <img src="../../public/icon-edit.svg" alt="edit icon" />
+                                                <a>Edit</a>
+                                            </div>
+                                        </>
+                                        : <>
+                                            <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
+                                            <a className="reply-txt reply">Reply</a>
+                                        </>
+                                    }
+
                                 </div>
                             </div>
                         </div>

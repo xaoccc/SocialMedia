@@ -53,3 +53,11 @@ class ShowAllComments(APIView):
         comments = Comment.objects.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class DeleteComment(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):        
+        data = request.data.copy()
+        comment = Comment.objects.get(id = data['comment_id'])
+        comment.delete()
+        return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
