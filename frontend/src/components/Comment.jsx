@@ -7,6 +7,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     useEffect(() => {
     }, [jwtData]);
+    console.log(userProfile);
 
     const handleLike = async (comment, action) => {
         try {
@@ -37,9 +38,6 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
         }
     }
 
-
-
-
     return (
         <div class="comment-wrapper">
             {comments.map((comment) => (
@@ -67,8 +65,19 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                             </div>
                             <div className="comment-header-right flex-row">
                                 <div className="flex-row">
-                                    <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
-                                    <a className="reply-txt reply">Reply</a>
+                                    {(userProfile.user == comment.user_id)                                    
+                                    ? <>
+                                        <img src="../../public/icon-delete.svg" className="delete" alt="delete icon" />
+                                        <a className="reply-txt delete">Delete</a>
+                                        <img src="../../public/icon-edit.svg" className="edit" alt="edit icon" />
+                                        <a className="reply-txt edit">Edit</a>
+                                      </>
+                                    :  <>
+                                        <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
+                                        <a className="reply-txt reply">Reply</a>
+                                      </>                                    
+                                    }                              
+                                    
                                 </div>
                             </div>
                         </div>
