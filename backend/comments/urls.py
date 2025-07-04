@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import AddNewComment, ShowAllComments, LikeComment, DeleteComment
+from .views import AddNewComment, ShowAllComments, LikeComment, DeleteComment, EditComment
 
 
 urlpatterns = [
@@ -7,5 +7,6 @@ urlpatterns = [
     path("add/", AddNewComment.as_view(), name="comment_add"),
     path("like/", LikeComment.as_view(), name="comment_like"),   
     path("delete/", DeleteComment.as_view(), name="comment_delete"),   
+    path("edit/", EditComment.as_view(), name="comment_edit"),   
 
 ]

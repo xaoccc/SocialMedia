@@ -61,3 +61,13 @@ class DeleteComment(APIView):
         comment = Comment.objects.get(id = data['comment_id'])
         comment.delete()
         return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
+    
+class EditComment(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):        
+        data = request.data.copy()
+        comment = Comment.objects.get(id = data['comment_id'])
+        print(data)
+        comment.content = data['editedContent']
+        comment.save()
+        return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)

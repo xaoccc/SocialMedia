@@ -4,6 +4,13 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     const { jwtData } = useAuth();
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editedContent, setEditedContent] = useState("");
+
+    const editComment = (comment) => {
+        setEditingCommentId(comment.id);
+        setEditedContent(comment.content);
+    };
 
     useEffect(() => {
     }, [jwtData]);
@@ -67,6 +74,36 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     }
 
+    const handleEdit = async (comment, editedContent) => {
+        try {
+            const response = await fetch('http://localhost:8000/comments/edit/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    comment_id: comment.id,
+                    editedContent: editedContent,
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            }
+
+            if (onCommentsUpdate) {
+                onCommentsUpdate();
+                setEditingCommentId(null);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
     return (
         <div class="comment-wrapper">
             {comments.map((comment) => (
@@ -100,7 +137,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                                 <img src="../../public/icon-delete.svg" alt="delete icon" />
                                                 <a className="delete-txt delete">Delete</a>
                                             </div>
-                                            <div className="edit flex-row">
+                                            <div className="edit flex-row" onClick={() => editComment(comment)}>
                                                 <img src="../../public/icon-edit.svg" alt="edit icon" />
                                                 <a>Edit</a>
                                             </div>
@@ -114,7 +151,20 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                 </div>
                             </div>
                         </div>
-                        <p className="comment-body">{comment.content}</p>
+                        <div key={comment.id}>
+                            {editingCommentId === comment.id ? (
+                                <>
+                                    <textarea
+                                        className="comment-body"
+                                        value={editedContent}
+                                        onChange={(e) => setEditedContent(e.target.value)}
+                                    />
+                                    <button onClick={() => handleEdit(comment, editedContent)}>Update</button>
+                                </>
+                            ) : (
+                                <p className="comment-body">{comment.content}</p>
+                            )}
+                        </div>
                     </article>
                 </div>
             ))}
