@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
+import Reply from "./Reply";
 
 
 export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     const { jwtData } = useAuth();
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedContent, setEditedContent] = useState("");
+    const [newReply, setNewReply] = useState(null);
 
     const editComment = (comment) => {
         setEditingCommentId(comment.id);
         setEditedContent(comment.content);
     };
+
+    const reply = (comment) => {
+        setNewReply(comment.id);
+    }
 
     useEffect(() => {
     }, [jwtData]);
@@ -95,6 +101,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
             }
 
             if (onCommentsUpdate) {
+                // Reload the comments data and exit the edit comment mode
                 onCommentsUpdate();
                 setEditingCommentId(null);
             }
@@ -144,7 +151,8 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                         </>
                                         : <>
                                             <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
-                                            <a className="reply-txt reply">Reply</a>
+                                            <a className="reply-txt reply" onClick={() => reply(comment)}>Reply</a>
+                                            <a className="reply-txt reply" onClick={() => setNewReply(null)}>Cancel Reply</a>
                                         </>
                                     }
 
@@ -165,7 +173,18 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                 <p className="comment-body">{comment.content}</p>
                             )}
                         </div>
+                        {newReply === comment.id && (
+                            <Reply
+                                commentId={comment.id}
+                                userProfile={userProfile}
+                                onReplySent={() => {
+                                    setNewReply(null);         
+                                    onCommentsUpdate?.();      
+                                }}
+                            />
+                        )}
                     </article>
+
                 </div>
             ))}
 

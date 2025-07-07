@@ -134,12 +134,17 @@ a:hover {
 }
 
 /* New Comments */
-.new-comment {
+.new-comment, .new-reply {
     justify-content: space-between;   
     margin-top: 1rem;
 }
 
-.new-comment textarea {
+.new-reply img {
+    width: 2.5rem;
+    height: 100%;
+}
+
+.new-comment textarea, .new-reply textarea {
     resize: none;
     max-width: 31.625rem;
     width: 100%;
@@ -151,11 +156,12 @@ textarea.comment-body {
     width: 100%;
     border: 1px solid hsl(220, 1%, 55%);
 }
-.new-comment button {
+.new-comment button, .new-reply button {
     padding: 1rem 2rem;
     background-color: hsl(238, 40%, 52%);
     color:#fff;
     border-radius: 0.5rem;
+    height: 100%;
 }
 
 small {
