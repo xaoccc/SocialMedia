@@ -5,6 +5,8 @@ export default function Reply({ commentId, userProfile }) {
     const [newReplyContent, setNewReplyContent] = useState('');
     const { jwtData } = useAuth();
 
+   
+
     useEffect(() => {
     }, [jwtData]);
 
@@ -12,7 +14,7 @@ export default function Reply({ commentId, userProfile }) {
         e.preventDefault();
 
         try {
-            const response = await fetch(`http://localhost:8000/comments/${commentId}/reply/`, {
+            const response = await fetch(`http://localhost:8000/comments/${commentId}/replies/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,24 +39,7 @@ export default function Reply({ commentId, userProfile }) {
         }
     }
 
-    const showAllReplies = async () => {
-        try {
-            const response = await fetch('http://localhost:8000/replies/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            if (!response.ok) {
-                console.error('Failed to fetch comments:', response.status);
-            } else {
-                const data = await response.json();
-                setComments(data);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
+
 
     return (
 

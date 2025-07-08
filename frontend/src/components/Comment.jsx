@@ -8,6 +8,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedContent, setEditedContent] = useState("");
     const [newReply, setNewReply] = useState(null);
+    const [replies, setReplies] = useState([]);
 
     const editComment = (comment) => {
         setEditingCommentId(comment.id);
@@ -111,6 +112,32 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     }
 
+
+    const showAllReplies = async (e, commentId) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`http://localhost:8000/comments/${commentId}/all-replies/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            if (!response.ok) {
+                console.error('Failed to fetch comments:', response.status);
+            } else {
+                const data = await response.json();
+                setReplies(data);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        showAllReplies();
+    }, []);
+
     return (
         <div class="comment-wrapper">
             {comments.map((comment) => (
@@ -178,8 +205,8 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                 commentId={comment.id}
                                 userProfile={userProfile}
                                 onReplySent={() => {
-                                    setNewReply(null);         
-                                    onCommentsUpdate?.();      
+                                    setNewReply(null);
+                                    onCommentsUpdate?.();
                                 }}
                             />
                         )}

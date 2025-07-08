@@ -1,9 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from .models import Comment, Like
-from .serializers import CommentSerializer
-from accounts.models import Profile  # Adjust if Profile is in another app
+from .models import Comment, Like, Reply
+from .serializers import CommentSerializer, ReplySerializer
+from accounts.models import Profile  
+from django.shortcuts import get_object_or_404
 
 class AddNewComment(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -71,3 +72,22 @@ class EditComment(APIView):
         comment.content = data['editedContent']
         comment.save()
         return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
+    
+class ReplyCreateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request, comment_id):
+        comment = get_object_or_404(Comment, id=comment_id)
+        
+        serializer = ReplySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user.profile, comment=comment)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+    
+class ShowAllReplies(APIView):
+    # permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        replies = Reply.objects.all()
+        serializer = ReplySerializer(replies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
