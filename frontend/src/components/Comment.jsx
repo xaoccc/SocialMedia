@@ -113,8 +113,9 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     }
 
 
-    const showAllReplies = async (e, commentId) => {
-        e.preventDefault();
+    const showAllReplies = async (commentId) => {
+        // e.preventDefault();
+        console.log(commentId)
 
         try {
             const response = await fetch(`http://localhost:8000/comments/${commentId}/all-replies/`, {
@@ -127,7 +128,10 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                 console.error('Failed to fetch comments:', response.status);
             } else {
                 const data = await response.json();
-                setReplies(data);
+                setReplies(prev => ({
+                    ...prev,
+                    [commentId]: data
+                }));
             }
         } catch (error) {
             console.error(error);
@@ -135,8 +139,14 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     };
 
     useEffect(() => {
-        showAllReplies();
-    }, []);
+        if (comments.length > 0) {
+            comments.forEach((comment) => {
+                showAllReplies(comment.id);
+            });
+        }
+    }, [comments]);
+
+
 
     return (
         <div class="comment-wrapper">
@@ -178,7 +188,10 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                         </>
                                         : <>
                                             <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
-                                            <a className="reply-txt reply" onClick={() => reply(comment)}>Reply</a>
+                                            <a className="reply-txt reply" onClick={() => {
+                                                setNewReply(comment.id);
+                                                // fetch replies when user clicks "Reply"
+                                            }}>Reply</a>
                                             <a className="reply-txt reply" onClick={() => setNewReply(null)}>Cancel Reply</a>
                                         </>
                                     }
@@ -200,14 +213,26 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                 <p className="comment-body">{comment.content}</p>
                             )}
                         </div>
+
+                        <div className="replies-wrapper">
+                            {(replies[comment.id] || []).map((reply) => (
+                                <div key={reply.id} className="reply-item">
+                                    <p>{reply.content}</p>
+                                    <span className="reply-author">{reply.username}</span>
+                                </div>
+                            ))}
+                        </div>
+
                         {newReply === comment.id && (
                             <Reply
                                 commentId={comment.id}
                                 userProfile={userProfile}
+                                replies={replies[comment.id] || []}
                                 onReplySent={() => {
                                     setNewReply(null);
                                     onCommentsUpdate?.();
                                 }}
+                                onRepliesUpdate={() => showAllReplies(comment.id)}
                             />
                         )}
                     </article>

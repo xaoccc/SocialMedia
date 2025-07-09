@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
 
-export default function Reply({ commentId, userProfile }) {
+export default function Reply({ commentId, userProfile, replies, onReplySent, onRepliesUpdate }) {
     const [newReplyContent, setNewReplyContent] = useState('');
     const { jwtData } = useAuth();
 
-   
+
 
     useEffect(() => {
     }, [jwtData]);
@@ -30,9 +30,12 @@ export default function Reply({ commentId, userProfile }) {
                 console.error('Error:', errorData);
                 return;
             }
+            if (onRepliesUpdate) {
+                console.log(onRepliesUpdate())
+                // onRepliesUpdate();
+            }
 
             setNewReplyContent('');
-            await showAllReplies();
 
         } catch (error) {
             console.error(error);
@@ -42,18 +45,21 @@ export default function Reply({ commentId, userProfile }) {
 
 
     return (
+        <>
 
-        <form className="new-reply flex-row" onSubmit={handleNewReply}>
-            <img src={userProfile.profile_picture_url} />
-            <textarea
-                rows="4"
-                name="new-reply"
-                id="new-reply"
-                placeholder="Add a comment..."
-                value={newReplyContent}
-                onChange={(e) => setNewReplyContent(e.target.value)}
-            ></textarea>
-            <button>REPLY</button>
-        </form>
+
+            <form className="new-reply flex-row" onSubmit={handleNewReply}>
+                <img src={userProfile.profile_picture_url} />
+                <textarea
+                    rows="4"
+                    name="new-reply"
+                    id="new-reply"
+                    placeholder="Add a comment..."
+                    value={newReplyContent}
+                    onChange={(e) => setNewReplyContent(e.target.value)}
+                ></textarea>
+                <button>REPLY</button>
+            </form>
+        </>
     );
 };
