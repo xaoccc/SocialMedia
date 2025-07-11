@@ -88,6 +88,6 @@ class ShowAllReplies(APIView):
     # permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        replies = Reply.objects.all()
+        replies = Reply.objects.filter(comment_id=kwargs['comment_id'])
         serializer = ReplySerializer(replies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

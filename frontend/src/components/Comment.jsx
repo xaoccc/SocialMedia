@@ -115,8 +115,6 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     const showAllReplies = async (commentId) => {
         // e.preventDefault();
-        console.log(commentId)
-
         try {
             const response = await fetch(`http://localhost:8000/comments/${commentId}/all-replies/`, {
                 method: 'GET',
@@ -153,13 +151,9 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
             {comments.map((comment) => (
                 <div key={comment.id} className="flex-row">
                     <div className="rating-wrapper">
-                        <button onClick={() => handleLike(comment, 'like')}>
-                            <img src="../../public/icon-plus.svg" alt="plus icon" />
-                        </button>
+                        <button onClick={() => handleLike(comment, 'like')}>+</button>
                         <div className="score">{comment.likes_count || 0}</div>
-                        <button onClick={() => handleLike(comment, 'unlike')}>
-                            <img src="../../public/icon-minus.svg" alt="minus icon" />
-                        </button>
+                        <button onClick={() => handleLike(comment, 'unlike')}>-</button>
                     </div>
                     <article>
                         <div className="comment-header flex-row">
@@ -216,9 +210,68 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
                         <div className="replies-wrapper">
                             {(replies[comment.id] || []).map((reply) => (
-                                <div key={reply.id} className="reply-item">
-                                    <p>{reply.content}</p>
-                                    <span className="reply-author">{reply.username}</span>
+
+
+                                <div key={reply.id} className="flex-row">
+                                    <div className="rating-wrapper">
+                                        <button onClick={() => handleLike(reply, 'like')}>+</button>
+                                        <div className="score">{reply.likes_count || 0}</div>
+                                        <button onClick={() => handleLike(reply, 'unlike')}>-</button>
+                                    </div>
+                                    <article>
+                                        <div className="comment-header flex-row">
+                                            <div className="comment-header-left flex-row">
+                                                <img className="profile-pic" src={reply.avatar || '../../public/no-profile.jpg'} alt="" />
+                                                <div className="profile-name">{reply.username || 'Anonymous'}</div>
+                                                <div className="date">{reply.created_at
+                                                    ? new Date(reply.created_at)
+                                                        .toLocaleDateString('en-GB')
+                                                        .replace(/\//g, '-')
+                                                    : ''}
+                                                </div>
+                                            </div>
+                                            <div className="comment-header-right flex-row">
+                                                <div className="flex-row">
+                                                    {(userProfile.user == reply.user_id)
+                                                        ? <>
+                                                            <div className="delete flex-row" onClick={() => handleDelete(reply)}>
+                                                                <img src="../../public/icon-delete.svg" alt="delete icon" />
+                                                                <a className="delete-txt delete">Delete</a>
+                                                            </div>
+                                                            <div className="edit flex-row" onClick={() => editComment(reply)}>
+                                                                <img src="../../public/icon-edit.svg" alt="edit icon" />
+                                                                <a>Edit</a>
+                                                            </div>
+                                                        </>
+                                                        : <>
+                                                            <img src="../../public/icon-reply.svg" className="reply" alt="reply icon" />
+                                                            <a className="reply-txt reply" onClick={() => {
+                                                                setNewReply(reply.id);
+                                                                // fetch replies when user clicks "Reply"
+                                                            }}>Reply</a>
+                                                            <a className="reply-txt reply" onClick={() => setNewReply(null)}>Cancel Reply</a>
+                                                        </>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* <div key={reply.id}>
+                                            {editingCommentId === reply.id ? (
+                                                <>
+                                                    <textarea
+                                                        className="comment-body"
+                                                        value={editedContent}
+                                                        onChange={(e) => setEditedContent(e.target.value)}
+                                                    />
+                                                    <button onClick={() => handleEdit(reply, editedContent)}>Update</button>
+                                                </>
+                                            ) : ( */}
+                                                <p className="comment-body">{reply.content}</p>
+                                            {/* )}
+                                        </div> */}
+                                    </article>
+
                                 </div>
                             ))}
                         </div>
