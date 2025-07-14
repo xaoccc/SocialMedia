@@ -75,6 +75,30 @@ form.new-comment {
     height: fit-content;
 }
 
+button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-size: 1em;
+    font-weight: 500;
+    padding: 0.75rem;
+    text-align: center;
+    font-family: inherit;
+    cursor: pointer;
+    color: gray;
+    transition: border-color 0.25s;
+}
+
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.rating-wrapper button {
+    padding: 0rem;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
 .rating-wrapper button:last-child {
     position: relative;
     bottom: 0.25rem;
