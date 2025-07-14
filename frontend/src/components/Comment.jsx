@@ -21,7 +21,6 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     useEffect(() => {
     }, [jwtData]);
-    console.log(userProfile);
 
     const handleLike = async (comment, action) => {
         try {
@@ -147,7 +146,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
 
     return (
-        <div class="comment-wrapper">
+        <div className="comment-wrapper">
             {comments.map((comment) => (
                 <div key={comment.id} className="flex-row">
                     <div className="rating-wrapper">
