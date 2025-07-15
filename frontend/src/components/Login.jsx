@@ -16,8 +16,9 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // debug
-        console.log(jwtData);
+        // We go to the homepage only after jwtData(token) is already in the local storage
+        // It cannot be there before if the loginUser() is not properly executed, so this ensures we cannot access homepage and all other 
+        // authentication required data before a properly executed loginUser()
         if (jwtData) {
             navigate(appRoutes.HOME);
         }
@@ -27,8 +28,9 @@ export default function Login() {
         e.preventDefault();
         setLoading(true);
 
+        // Here we call the API in api.js
         try {
-            const data = await loginUser(email, password); // Call the API
+            const data = await loginUser(email, password); 
             setJwtData(data);
         }
 
@@ -49,6 +51,7 @@ export default function Login() {
                     type='email'
                     id='email'
                     name='email'
+                    autoComplete="current-email"
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
@@ -57,6 +60,7 @@ export default function Login() {
                     type='password'
                     id='password'
                     name='password'
+                    autoComplete="current-password"
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />

@@ -13,7 +13,7 @@ const apiClient = axios.create({
 // Function to log in and get tokens
 export const loginUser = async (email, password) => {
   const response = await apiClient.post('/auth/login/', { email, password });
-  return response.data; // Assuming the response contains tokens
+  return response.data; 
 };
 
 export default apiClient;

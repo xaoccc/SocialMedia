@@ -8,7 +8,10 @@ const router = createBrowserRouter(routesConfig);
 function App() {
     return (
         <AuthProvider>
-            <RouterProvider router={router} />
+            <RouterProvider 
+                router={router}
+                fallbackElement={<div>Loading route...</div>} 
+            />
         </AuthProvider>
     );
 }

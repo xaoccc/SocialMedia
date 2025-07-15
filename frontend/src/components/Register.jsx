@@ -75,6 +75,7 @@ export default function Register() {
                     type='email'
                     id='email'
                     name='email'
+                    autoComplete="current-email"
                     onChange={(e) => setEmail(e.target.value)}
                     required
                 />
@@ -83,6 +84,7 @@ export default function Register() {
                     type='password'
                     id='password-one'
                     name='password1'
+                    autoComplete="current-password1"
                     onChange={(e) => setPassword1(e.target.value)}
                     required
                 />
@@ -91,6 +93,7 @@ export default function Register() {
                     type='password'
                     id='password-two'
                     name='password2'
+                    autoComplete="current-password2"
                     onChange={(e) => setPassword2(e.target.value)}
                     required
                 />
