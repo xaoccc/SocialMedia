@@ -7,14 +7,12 @@ const NotFound = () => {
 
         <section className='not-found'>
             <div className="not-found-text">
-                <h1>Llike unicorns, this page does not exist... or at least not anymore</h1>
-                <h2>But just like them, it's magic and can take you wherever you want</h2>
-                <Link to={appRoutes.HOME}>Return to the Home page</Link>
-                <div className="404">
-                    <span>error</span>
-                    <span>404</span>
+                <h1>Like unicorns, this page does not exist or is not available at the moment</h1>
+                <h2>But just like them, it's magic and can take you wherever you want... Almost anywhere</h2>
+                <div className="not-found-nav">
+                    <Link to={appRoutes.LOGIN}>Return to the login page</Link>
+                    <Link to={appRoutes.REGISTER}>Return to the register page</Link>
                 </div>
-
             </div>
             <div className="unicorn"></div>
 

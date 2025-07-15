@@ -204,4 +204,12 @@ small {
     font-size: 0.75rem;
 }
 
+/* Not Found */ 
+.not-found-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
 

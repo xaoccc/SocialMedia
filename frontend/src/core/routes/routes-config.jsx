@@ -36,7 +36,8 @@ const routesConfig = [
     {
         path: appRoutes.HOME,
         loader: userData,
-        element: <Home />
+        element: <Home />,
+        errorElement: <NotFound />
     },
     {
         path: appRoutes.ABOUT,

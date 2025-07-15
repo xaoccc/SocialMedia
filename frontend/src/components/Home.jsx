@@ -5,6 +5,7 @@ import '../reset.css';
 import '../styles.css';
 import { useLoaderData } from 'react-router-dom';
 import Comment from './Comment.jsx';
+import NotFound from './NotFound.jsx'
 
 const Home = () => {
     const { jwtData } = useAuth();
@@ -12,8 +13,10 @@ const Home = () => {
     const [newCommentContent, setNewCommentContent] = useState('');
     const [comments, setComments] = useState([]);
 
+
     useEffect(() => {
     }, [jwtData]);
+
 
     useEffect(() => {
     }, [userProfile]);
@@ -71,6 +74,7 @@ const Home = () => {
     }, []);
 
     return (
+
         <section className="container">
             <NavBar />
             {jwtData ? (
@@ -96,6 +100,7 @@ const Home = () => {
             </form>
 
         </section>
+
     );
 };
 
