@@ -80,6 +80,35 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     }
 
+    const handleReplyDelete = async (commentId, replyId) => {
+        try {
+            const response = await fetch(`http://localhost:8000/comments/${commentId}/delete-reply/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    comment_id: commentId,
+                    reply_id: replyId
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            }
+
+            if (onCommentsUpdate) {
+                onCommentsUpdate();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
     const handleEdit = async (comment, editedContent) => {
         try {
             const response = await fetch('http://localhost:8000/comments/edit/', {
@@ -233,7 +262,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                                 <div className="flex-row">
                                                     {(userProfile.user == reply.user_id)
                                                         ? <>
-                                                            <div className="delete flex-row" onClick={() => handleDelete(reply)}>
+                                                            <div className="delete flex-row" onClick={() => handleReplyDelete(comment.id, reply.id)}>
                                                                 <img src="../../public/icon-delete.svg" alt="delete icon" />
                                                                 <a className="delete-txt delete">Delete</a>
                                                             </div>

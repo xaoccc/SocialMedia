@@ -85,9 +85,19 @@ class ReplyCreateView(APIView):
         return Response(serializer.errors, status=400)
     
 class ShowAllReplies(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         replies = Reply.objects.filter(comment_id=kwargs['comment_id'])
         serializer = ReplySerializer(replies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class DeleteReply(APIView):
+
+    def post(self, request, comment_id):        
+        data = request.data.copy()
+        reply = Reply.objects.get(id = data['reply_id'], comment_id=comment_id)
+        reply.delete()
+        return Response({"success": "Reply successfully deleted."}, status=status.HTTP_201_CREATED)
+    
+

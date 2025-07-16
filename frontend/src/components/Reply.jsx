@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
 
-export default function Reply({ commentId, userProfile, replies, onReplySent, onRepliesUpdate }) {
+export default function Reply({ commentId, userProfile, onRepliesUpdate }) {
     const [newReplyContent, setNewReplyContent] = useState('');
     const { jwtData } = useAuth();
 
@@ -31,8 +31,7 @@ export default function Reply({ commentId, userProfile, replies, onReplySent, on
                 return;
             }
             if (onRepliesUpdate) {
-                console.log(onRepliesUpdate())
-                // onRepliesUpdate();
+                onRepliesUpdate();
             }
 
             setNewReplyContent('');
