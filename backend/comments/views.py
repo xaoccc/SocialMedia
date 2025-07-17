@@ -68,7 +68,6 @@ class EditComment(APIView):
     def post(self, request):        
         data = request.data.copy()
         comment = Comment.objects.get(id = data['comment_id'])
-        print(data)
         comment.content = data['editedContent']
         comment.save()
         return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
@@ -99,5 +98,13 @@ class DeleteReply(APIView):
         reply = Reply.objects.get(id = data['reply_id'], comment_id=comment_id)
         reply.delete()
         return Response({"success": "Reply successfully deleted."}, status=status.HTTP_201_CREATED)
+    
+class EditReply(APIView):
+    def post(self, request, comment_id):
+        data = request.data.copy()
+        reply = Reply.objects.get(id = data['reply_id'])
+        reply.content = data['reply_content']
+        reply.save()
+        return Response({"success": "Reply successfully updated."}, status=status.HTTP_201_CREATED)
     
 

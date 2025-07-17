@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
 import Reply from "./Reply";
 
-
 export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     const { jwtData } = useAuth();
     const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingReplyId, setEditingReplyId] = useState(null);
     const [editedContent, setEditedContent] = useState("");
+    const [editedReplyContent, setEditedReplyContent] = useState("");
     const [newReply, setNewReply] = useState(null);
     const [replies, setReplies] = useState([]);
 
@@ -15,9 +16,11 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
         setEditedContent(comment.content);
     };
 
-    const reply = (comment) => {
-        setNewReply(comment.id);
-    }
+    const editReply = (reply) => {
+        setEditingReplyId(reply.id);
+        setEditedReplyContent(reply.content);
+    };
+
 
     useEffect(() => {
     }, [jwtData]);
@@ -109,7 +112,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     }
 
-    const handleEdit = async (comment, editedContent) => {
+    const handleCommentEdit = async (comment, editedContent) => {
         try {
             const response = await fetch('http://localhost:8000/comments/edit/', {
                 method: 'POST',
@@ -133,6 +136,36 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                 // Reload the comments data and exit the edit comment mode
                 onCommentsUpdate();
                 setEditingCommentId(null);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
+    }
+
+    const handleReplyEdit = async (commentId, editedReplyContent, replyId) => {
+        try {
+            const response = await fetch(`http://localhost:8000/comments/${commentId}/edit-reply/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    comment_id: commentId,
+                    reply_id: replyId,                    
+                    reply_content: editedReplyContent,
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            } else {
+                // Reload the replies data and exit the edit reply mode
+                await showAllReplies(commentId);
+                setEditingReplyId(null);
             }
         } catch (error) {
             console.error(error);
@@ -229,7 +262,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                         value={editedContent}
                                         onChange={(e) => setEditedContent(e.target.value)}
                                     />
-                                    <button onClick={() => handleEdit(comment, editedContent)}>Update</button>
+                                    <button onClick={() => handleCommentEdit(comment, editedContent)}>Update</button>
                                 </>
                             ) : (
                                 <p className="comment-body">{comment.content}</p>
@@ -238,7 +271,6 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
                         <div className="replies-wrapper">
                             {(replies[comment.id] || []).map((reply) => (
-
 
                                 <div key={reply.id} className="flex-row">
                                     <div className="rating-wrapper">
@@ -266,7 +298,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                                                 <img src="../../public/icon-delete.svg" alt="delete icon" />
                                                                 <a className="delete-txt delete">Delete</a>
                                                             </div>
-                                                            <div className="edit flex-row" onClick={() => editComment(reply)}>
+                                                            <div className="edit flex-row" onClick={() => editReply(reply)}>
                                                                 <img src="../../public/icon-edit.svg" alt="edit icon" />
                                                                 <a>Edit</a>
                                                             </div>
@@ -284,20 +316,20 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* <div key={reply.id}>
-                                            {editingCommentId === reply.id ? (
+                                        <div key={reply.id}>
+                                            {editingReplyId === reply.id ? (
                                                 <>
                                                     <textarea
                                                         className="comment-body"
-                                                        value={editedContent}
-                                                        onChange={(e) => setEditedContent(e.target.value)}
+                                                        value={editedReplyContent}
+                                                        onChange={(e) => setEditedReplyContent(e.target.value)}
                                                     />
-                                                    <button onClick={() => handleEdit(reply, editedContent)}>Update</button>
+                                                    <button onClick={() => handleReplyEdit(comment.id, editedReplyContent, reply.id)}>Update</button>
                                                 </>
-                                            ) : ( */}
+                                            ) : (
                                                 <p className="comment-body">{reply.content}</p>
-                                            {/* )}
-                                        </div> */}
+                                             )}
+                                        </div> 
                                     </article>
 
                                 </div>
