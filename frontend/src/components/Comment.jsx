@@ -82,11 +82,9 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
         } catch (error) {
             console.error(error);
         }
-
     }
 
-
-    const handleCommentEdit = async (comment, editedContent) => {
+    const handleEdit = async (commentId, replyId, editedContent) => {
         try {
             const response = await fetch('http://localhost:8000/comments/edit/', {
                 method: 'POST',
@@ -95,10 +93,13 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                     'Authorization': `Bearer ${jwtData.access}`,
                 },
                 body: JSON.stringify({
-                    comment_id: comment.id,
-                    editedContent: editedContent,
+                    comment_id: commentId,
+                    reply_id: replyId,
+                    content: editedContent,
                 })
             });
+
+            const data = await response.json();
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -106,38 +107,12 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                 return;
             }
 
-            if (onCommentsUpdate) {
+            if (onCommentsUpdate && data['success'].split(' ')[0] == 'Comment') {
                 // Reload the comments data and exit the edit comment mode
                 onCommentsUpdate();
                 setEditingCommentId(null);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-
-    }
-
-    const handleReplyEdit = async (commentId, editedReplyContent, replyId) => {
-        try {
-            const response = await fetch(`http://localhost:8000/comments/${commentId}/edit-reply/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwtData.access}`,
-                },
-                body: JSON.stringify({
-                    comment_id: commentId,
-                    reply_id: replyId,                    
-                    reply_content: editedReplyContent,
-                })
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Error:', errorData);
-                return;
-            } else {
-                // Reload the replies data and exit the edit reply mode
+            } else if (data['success'].split(' ')[0] == 'Reply') {
+                // Reload the replies data and exit the edit comment mode
                 await showAllReplies(commentId);
                 setEditingReplyId(null);
             }
@@ -147,9 +122,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
     }
 
-
     const showAllReplies = async (commentId) => {
-        // e.preventDefault();
         try {
             const response = await fetch(`http://localhost:8000/comments/${commentId}/all-replies/`, {
                 method: 'GET',
@@ -178,8 +151,6 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
             });
         }
     }, [comments]);
-
-
 
     return (
         <div className="comment-wrapper">
@@ -236,7 +207,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                         value={editedContent}
                                         onChange={(e) => setEditedContent(e.target.value)}
                                     />
-                                    <button onClick={() => handleCommentEdit(comment, editedContent)}>Update</button>
+                                    <button onClick={() => handleEdit(comment.id, null, editedContent)}>Update</button>
                                 </>
                             ) : (
                                 <p className="comment-body">{comment.content}</p>
@@ -298,7 +269,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                                                         value={editedReplyContent}
                                                         onChange={(e) => setEditedReplyContent(e.target.value)}
                                                     />
-                                                    <button onClick={() => handleReplyEdit(comment.id, editedReplyContent, reply.id)}>Update</button>
+                                                    <button onClick={() => handleEdit(comment.id, reply.id, editedReplyContent)}>Update</button>
                                                 </>
                                             ) : (
                                                 <p className="comment-body">{reply.content}</p>

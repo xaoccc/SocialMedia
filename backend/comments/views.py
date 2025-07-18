@@ -57,14 +57,7 @@ class ShowAllComments(APIView):
     
 
     
-class EditComment(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    def post(self, request):        
-        data = request.data.copy()
-        comment = Comment.objects.get(id = data['comment_id'])
-        comment.content = data['editedContent']
-        comment.save()
-        return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
+
     
 class ReplyCreateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -97,13 +90,22 @@ class DeleteView(APIView):
             reply = Reply.objects.get(id = data['reply_id'])
             reply.delete()
             return Response({"success": "Reply successfully deleted."}, status=status.HTTP_201_CREATED)
+
     
-class EditReply(APIView):
-    def post(self, request, comment_id):
+class EditView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):        
         data = request.data.copy()
-        reply = Reply.objects.get(id = data['reply_id'])
-        reply.content = data['reply_content']
-        reply.save()
-        return Response({"success": "Reply successfully updated."}, status=status.HTTP_201_CREATED)
+        if data['reply_id'] is None:
+            comment = Comment.objects.get(id = data['comment_id'])
+            comment.content = data['content']
+            comment.save()
+            return Response({"success": "Comment successfully updated."}, status=status.HTTP_201_CREATED)
+        else:
+            reply = Reply.objects.get(id = data['reply_id'])
+            reply.content = data['content']
+            reply.save()
+            return Response({"success": "Reply successfully updated."}, status=status.HTTP_201_CREATED)
+
     
 
