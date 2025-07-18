@@ -55,13 +55,7 @@ class ShowAllComments(APIView):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-class DeleteComment(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    def post(self, request):        
-        data = request.data.copy()
-        comment = Comment.objects.get(id = data['comment_id'])
-        comment.delete()
-        return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
+
     
 class EditComment(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -89,15 +83,20 @@ class ShowAllReplies(APIView):
         replies = Reply.objects.filter(comment_id=kwargs['comment_id'])
         serializer = ReplySerializer(replies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-
-class DeleteReply(APIView):
-
-    def post(self, request, comment_id):        
+   
+class DeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):        
         data = request.data.copy()
-        reply = Reply.objects.get(id = data['reply_id'], comment_id=comment_id)
-        reply.delete()
-        return Response({"success": "Reply successfully deleted."}, status=status.HTTP_201_CREATED)
+        print(data)
+        if data['reply_id'] is None:
+            comment = Comment.objects.get(id = data['comment_id'])
+            comment.delete()
+            return Response({"success": "Comment successfully deleted."}, status=status.HTTP_201_CREATED)
+        else:
+            reply = Reply.objects.get(id = data['reply_id'])
+            reply.delete()
+            return Response({"success": "Reply successfully deleted."}, status=status.HTTP_201_CREATED)
     
 class EditReply(APIView):
     def post(self, request, comment_id):
