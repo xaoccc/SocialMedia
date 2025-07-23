@@ -25,7 +25,8 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
     useEffect(() => {
     }, [jwtData]);
 
-    const handleLike = async (comment, action) => {
+    // We use the same like handler for both comment and reply
+    const handleLike = async (comment, reply, action) => {
         try {
             const response = await fetch('http://localhost:8000/comments/like/', {
                 method: 'POST',
@@ -36,6 +37,7 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
                 body: JSON.stringify({
                     comment_id: comment.id,
                     user_id: userProfile.user,
+                    reply_id: reply?.id ?? '', /* here we check if the like is for a comment of for a reply  */
                     action: action
                 })
             });
@@ -157,9 +159,9 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
             {comments.map((comment) => (
                 <div key={comment.id} className="flex-row">
                     <div className="rating-wrapper">
-                        <button onClick={() => handleLike(comment, 'like')}>+</button>
+                        <button onClick={() => handleLike(comment, null, 'like')}>+</button>
                         <div className="score">{comment.likes_count || 0}</div>
-                        <button onClick={() => handleLike(comment, 'unlike')}>-</button>
+                        <button onClick={() => handleLike(comment, null, 'unlike')}>-</button>
                     </div>
                     <article>
                         <div className="comment-header flex-row">
@@ -219,9 +221,9 @@ export default function Comment({ comments, userProfile, onCommentsUpdate }) {
 
                                 <div key={reply.id} className="flex-row">
                                     <div className="rating-wrapper">
-                                        <button onClick={() => handleLike(reply, 'like')}>+</button>
+                                        <button onClick={() => handleLike(comment, reply, 'like')}>+</button>
                                         <div className="score">{reply.likes_count || 0}</div>
-                                        <button onClick={() => handleLike(reply, 'unlike')}>-</button>
+                                        <button onClick={() => handleLike(comment, reply, 'unlike')}>-</button>
                                     </div>
                                     <article>
                                         <div className="comment-header flex-row">

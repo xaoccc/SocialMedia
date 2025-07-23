@@ -1,7 +1,13 @@
 # DjangoRestReactGoogleAuth
-A self-descriptive app, focused on using google auth using Django and React
+A social network with, called KYP (Keep Yourself Positive)
+1. Main features:
+    - Authentication and authorization, also with google
+    - Write, edit and delete comments and replies
+    - Like the comments and the replies
+    - View and edit the profile info (todo)
 
-1. Install  
+2. Install 
+    Assuming you have Python, Node.js, PostgreSQL, some IDE, working with both Python and JavaScript(for example VS Code) and a database client, like PGadmin. 
     1.1. Backend  
     - Run new terminal in the main dir AND  
     - Create new virtual environment: `py -m venv venv`
@@ -13,7 +19,7 @@ A self-descriptive app, focused on using google auth using Django and React
     - Run new terminal in the frontend dir
     - Install dependencies: `npm i`
 
-2. Setup
+3. Setup
     Create a google client ID in the google cloud console. Make sure GOOGLE_OAUTH_CALLBACK_URL from the .env file is there.  
     1.1. Backend:  
     add the appropriate data in the .env file:
@@ -31,7 +37,7 @@ A self-descriptive app, focused on using google auth using Django and React
     - Add VITE_GOOGLE_OAUTH_CLIENT_ID in the .env file
 
 
-3. Run  
+4. Run  
     1.1. Backend  
     - Run new terminal in the backend dir  
     - Migrate the database: `py manage.py migrate`

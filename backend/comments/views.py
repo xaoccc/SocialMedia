@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
-from .models import Comment, Like, Reply
+from .models import Comment, Like, Reply, ReplyLike
 from .serializers import CommentSerializer, ReplySerializer
 from accounts.models import Profile  
 from django.shortcuts import get_object_or_404
@@ -31,19 +31,25 @@ class LikeComment(APIView):
 
     def post(self, request):
         data = request.data.copy()
-      
-        like = Like.objects.filter(comment_id=data['comment_id']).filter(user_id=data['user_id'])
-        if like is None or like.count() == 0:
-            if data['action'] == 'like':
-                like = Like.objects.create(comment_id=data['comment_id'], user_id=data['user_id'])
-                like.save()
+        def like(model, comment_id, reply_id):
+            like = model.objects.filter(comment_id=comment_id) if reply_id == '' else model.objects.filter(reply_id=reply_id).filter(user_id=data['user_id'])
+            if like is None or like.count() == 0:
+                if data['action'] == 'like':
+                    like = model.objects.create(comment_id=comment_id, user_id=data['user_id']) if reply_id == '' else model.objects.create(reply_id=reply_id, user_id=data['user_id'])
+                    like.save()
+                    return Response(data, status=status.HTTP_201_CREATED)
+            elif (like is None or like.count() > 0) and data['action'] == 'unlike':
+                like.delete()
                 return Response(data, status=status.HTTP_201_CREATED)
-        elif (like is None or like.count() > 0) and data['action'] == 'unlike':
-            like.delete()
-            return Response(data, status=status.HTTP_201_CREATED)
+            
+            return Response({"error": "Comment likes not updated. You can like a comment just once."}, status=status.HTTP_400_BAD_REQUEST)
 
+        if data['reply_id'] == '' :
+            return like(Like, data['comment_id'], '')
+        else:
+            return like(ReplyLike, data['comment_id'], data['reply_id'])
         
-        return Response({"error": "Comment likes not updated. You can like a comment just once."}, status=status.HTTP_400_BAD_REQUEST)
+        
         
         
 
