@@ -49,7 +49,6 @@ A social network with, called KYP (Keep Yourself Positive)
 
 
 Notes to self:
-- Manage likes for replies and make them use the same views and urls as these for the comments
 - Improve validation and security
 - fix `hook.js:608 No HydrateFallback element provided` error
 - Improve CSS
