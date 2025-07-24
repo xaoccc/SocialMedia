@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from django.shortcuts import render
 from django.views import View
 from django.contrib.auth import get_user_model
+from allauth.account.utils import send_email_confirmation
 
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ProfileSerializer, UserSerializer
@@ -81,6 +82,9 @@ class CustomRegisterView(RegisterView):
         profile = Profile.objects.get(user_id=user_object.id)
         profile.profile_picture_url='https://raw.githubusercontent.com/xaoccc/SocialMedia/refs/heads/main/frontend/public/no-profile.jpg'
         profile.save()
+
+        send_email_confirmation(self.request, user, signup=True)
+
         return user
     
 class AllUsersView(APIView):
