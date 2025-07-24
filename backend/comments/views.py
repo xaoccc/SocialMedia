@@ -32,7 +32,8 @@ class LikeComment(APIView):
     def post(self, request):
         data = request.data.copy()
         def like(model, comment_id, reply_id):
-            like = model.objects.filter(comment_id=comment_id) if reply_id == '' else model.objects.filter(reply_id=reply_id).filter(user_id=data['user_id'])
+            like = model.objects.filter(comment_id=comment_id) if reply_id == '' else model.objects.filter(reply_id=reply_id)
+            like = like.filter(user_id=data['user_id'])
             if like is None or like.count() == 0:
                 if data['action'] == 'like':
                     like = model.objects.create(comment_id=comment_id, user_id=data['user_id']) if reply_id == '' else model.objects.create(reply_id=reply_id, user_id=data['user_id'])
