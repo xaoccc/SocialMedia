@@ -6,6 +6,7 @@ import Verification from "../../components/Verification.jsx";
 import Home from "../../components/Home.jsx";
 import About from "../../components/About.jsx";
 import Contact from "../../components/Contact.jsx";
+import Profile from "../../components/Profile.jsx";
 import NotFound from "../../components/NotFound.jsx";
 import GoogleCallback from "../../components/GoogleCallback.jsx";
 import ConfirmEmail from '../../components/ConfirmEmail.jsx';
@@ -46,6 +47,10 @@ const routesConfig = [
     {
         path: appRoutes.CONTACT,
         element: <Contact />
+    },
+    {
+        path: appRoutes.PROFILE,
+        element: <Profile />
     },
     {
         path: appRoutes.UNKNOWN,

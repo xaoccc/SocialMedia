@@ -18,6 +18,7 @@ const About = () => {
             ) : (
                 <p>You are not logged in</p>
             )}
+            
 
         </section>
 
