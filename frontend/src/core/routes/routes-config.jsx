@@ -50,7 +50,9 @@ const routesConfig = [
     },
     {
         path: appRoutes.PROFILE,
-        element: <Profile />
+        loader: userData,
+        element: <Profile />,
+        errorElement: <NotFound />,
     },
     {
         path: appRoutes.UNKNOWN,

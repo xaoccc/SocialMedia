@@ -93,3 +93,13 @@ class AllUsersView(APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, *args, **kwargs):
+        User = get_user_model()
+        current_user = User.objects.get(id=request.user)
+        print(current_user)
+        serializer = UserSerializer(current_user, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)

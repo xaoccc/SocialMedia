@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import appRoutes from '../core/routes/routes.js';
 
@@ -99,6 +99,9 @@ export default function Register() {
                 />
                 <p>{errorMsg}</p>
                 <button className="register-btn">Register</button>
+            <button>
+                <Link to={appRoutes.LOGIN}>Login Page</Link>
+            </button>
             </form>
         </section>
     );

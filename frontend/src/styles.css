@@ -169,7 +169,7 @@ button {
               background-color 0.3s ease-in-out,
               border-color 0.3s ease-in-out;
 }
-.login-wrapper button {
+.login-wrapper button, .reg-form-container button {
     border: 1px solid #747bff;   
     color: #747bff;
     background-color: #181933;
@@ -180,7 +180,7 @@ button {
       
 }
 
-.login-wrapper button:hover {
+.login-wrapper button:hover, .reg-form-container button:hover {
     background-color: #000;
     color: #cbcdf1; 
     border: 1px solid #cbcdf1; 

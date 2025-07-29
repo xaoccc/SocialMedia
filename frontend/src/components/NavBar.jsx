@@ -7,10 +7,6 @@ const NavBar = () => {
     const { jwtData } = useAuth();
 
     useEffect(() => {
-        // Debug
-        // if (jwtData) {
-        //     console.log('JWT Data:', jwtData);
-        // }
     }, [jwtData]);
 
     return (
@@ -25,6 +21,9 @@ const NavBar = () => {
                             </li>
                             <li>
                                 <Link to={appRoutes.ABOUT}>About Us</Link>
+                            </li>
+                            <li>
+                                <Link to={appRoutes.PROFILE}>Profile</Link>
                             </li>
                             <li>
                                 <Link to={appRoutes.LOGOUT}>Logout</Link>
