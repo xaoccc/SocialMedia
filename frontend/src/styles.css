@@ -91,6 +91,10 @@ input {
     display: flex;
     flex-direction: row;
 }
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
 
 .comment-wrapper, .new-comment {
     background-color: #fff;
@@ -307,6 +311,9 @@ small {
 .contact-us i {
     margin-right: 0.75rem;
 }
+
+/* Profile */
+
 
 /* Not Found */ 
 .not-found-nav {

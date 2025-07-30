@@ -7,6 +7,7 @@ const Profile = () => {
     const { jwtData } = useAuth();
     const userProfile = useLoaderData();
     const [userData, setUserData] = useState();
+    const [editProfileState, setEditProfileState] = useState();
 
     useEffect(() => {
     }, [jwtData]);
@@ -14,6 +15,7 @@ const Profile = () => {
     useEffect(() => {
     }, [userProfile]);
 
+    // We put the API call into the hook, so that we call it just once on page render, otherwise there will be an infinite loop
     useEffect(() => {
         const getUserData = async () => {
             // e.preventDefault();
@@ -39,9 +41,22 @@ const Profile = () => {
             }
 
         }
-        getUserData();      
+        getUserData();
+
 
     }, []);
+
+
+    const editProfile = () => {
+        setEditProfileState('editMode')
+
+    }
+
+    // Todo...post request
+    const finishEditProfile = () => {
+        setEditProfileState(null)
+
+    }
 
     return (
         <>
@@ -50,13 +65,30 @@ const Profile = () => {
                 {jwtData ? (
                     <div className="contact">
                         <h1>Profile</h1>
-                        <div className="profileData">
-                            <img src={userProfile.profile_picture_url} alt='profile picture' />
-                            <p><span>User Name:</span><span>{userData ? userData.username : null}</span></p>
-                            <p><span>Email Address:</span><span>{userData ? userData.email : null}</span></p>
-                            <p><span>First Name:</span><span>{userData ? userData.first_name : null}</span></p>
-                            <p><span>Last Name</span><span>{userData ? userData.last_name : null}</span></p>
-                        </div>
+                        {
+                            (!editProfileState) ?
+                                <div className="profile-data">
+                                    <img src={userProfile.profile_picture_url} alt='profile picture' />
+                                    <p><span>User Name:</span><span>{userData ? userData.username : null}</span></p>
+                                    <p><span>Email Address:</span><span>{userData ? userData.email : null}</span></p>
+                                    <p><span>First Name:</span><span>{userData ? userData.first_name : null}</span></p>
+                                    <p><span>Last Name</span><span>{userData ? userData.last_name : null}</span></p>
+                                    <button onClick={editProfile}>Edit Profile</button>
+                                </div>
+                                :
+                                <form className="profile-data" onSubmit={finishEditProfile}>
+                                    <div class='flex-col'>
+                                        <label>Profile Picture</label>
+                                        <input name="" id="" value={userProfile.profile_picture_url} />
+                                    </div>
+                                    <div class='flex-col'>
+                                        <label for='username'>User Name:</label>
+                                        <input name='username' id="username" value={userData.username} />
+                                    </div>
+                                    <button type='submit'>Submit</button>
+                                </form>
+                        }
+
                     </div>
                 ) : (
                     <p>You are not logged in</p>
