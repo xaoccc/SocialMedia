@@ -14,7 +14,7 @@ from django.contrib.auth import get_user_model
 from allauth.account.utils import send_email_confirmation
 
 from rest_framework.permissions import IsAuthenticated
-from .serializers import ProfileSerializer, UserSerializer
+from .serializers import ProfileSerializer, UserSerializer, UserProfileUpdateSerializer
 from .models import Profile
 
 from dj_rest_auth.registration.views import RegisterView
@@ -105,21 +105,13 @@ class UserView(APIView):
     
 class UserEditView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request):
-        data = request.data.copy()
-        User = get_user_model()
-        user = User.objects.get(id=data['user_id'])
-        user.username = data['username']
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
-        profile = Profile.objects.get(user_id=data['user_id'])
-        profile.profile_picture_url = data['profile_picture_url']
-        user.save()
-        profile.save()   
-
-
-        return Response(data, status=status.HTTP_201_CREATED)
+        serializer = UserProfileUpdateSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

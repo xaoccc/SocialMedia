@@ -17,23 +17,24 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 
-class UserProfileUpdateSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer(required=False)
-
-    class Meta:
-        model = get_user_model()
-        fields = ['username', 'first_name', 'last_name', 'profile']
+class UserProfileUpdateSerializer(serializers.Serializer):
+    username = serializers.CharField(required=False)
+    first_name = serializers.CharField(required=False)
+    last_name = serializers.CharField(required=False)
+    profile_picture_url = serializers.URLField(required=False)
 
     def update(self, instance, validated_data):
-        profile_data = validated_data.pop('profile', {})
+        user = instance
+        profile = user.profile
 
-        # Update User fields
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
+        user.username = validated_data.get('username', user.username)
+        user.first_name = validated_data.get('first_name', user.first_name)
+        user.last_name = validated_data.get('last_name', user.last_name)
+        user.save()
 
-        # Update Profile fields
-        profile = instance.profile  # assuming a OneToOne relationship exists
-        for attr, value in profile_data.items():
-            setattr(profile, attr, value)
+        profile.profile_picture_url = validated_data.get(
+            'profile_picture_url', profile.profile_picture_url
+        )
         profile.save()
+
+        return user

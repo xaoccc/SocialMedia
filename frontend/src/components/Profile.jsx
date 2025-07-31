@@ -61,7 +61,6 @@ const Profile = () => {
                     'Authorization': `Bearer ${jwtData.access}`,
                 },
                 body: JSON.stringify({
-                    user_id: userData.pk,
                     profile_picture_url: userProfile.profile_picture_url,
                     username: userData.username,
                     first_name: userData.first_name,
@@ -102,7 +101,7 @@ const Profile = () => {
                                     <p><span>User Name:</span><span>{userData ? userData.username : null}</span></p>
                                     <p><span>Email Address:</span><span>{userData ? userData.email : null}</span></p>
                                     <p><span>First Name:</span><span>{userData ? userData.first_name : null}</span></p>
-                                    <p><span>Last Name</span><span>{userData ? userData.last_name : null}</span></p>
+                                    <p><span>Last Name:</span><span>{userData ? userData.last_name : null}</span></p>
                                     <button onClick={editProfile}>Edit Profile</button>
                                 </div>
                                 :

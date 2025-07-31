@@ -42,7 +42,7 @@ nav {
     width: 90%;
 }
 
-nav > img {
+nav > a > img {
     height: 4rem;
 }
 
@@ -176,7 +176,7 @@ button {
               background-color 0.3s ease-in-out,
               border-color 0.3s ease-in-out;
 }
-.login-wrapper button, .reg-form-container button {
+.login-wrapper button, .reg-form-container button, .profile-data button{
     border: 1px solid #747bff;   
     color: #747bff;
     background-color: #181933;
@@ -187,7 +187,7 @@ button {
       
 }
 
-.login-wrapper button:hover, .reg-form-container button:hover {
+.login-wrapper button:hover, .reg-form-container button:hover, .profile-data button:hover {
     background-color: #000;
     color: #cbcdf1; 
     border: 1px solid #cbcdf1; 
@@ -293,7 +293,7 @@ textarea.comment-body {
     width: 100%;
     border: 1px solid hsl(220, 1%, 55%);
 }
-.new-comment button, .new-reply button {
+.new-comment button, .new-reply button, .profile-data button {
     padding: 1rem 2rem;
     background-color: hsl(238, 40%, 52%);
     color:#fff;
@@ -320,6 +320,16 @@ small {
     max-width: 5rem;
     aspect-ratio: 1;
     border-radius: 50%;
+    margin-bottom: 1rem;
+}
+.profile-data p {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    line-height: 1.8;
+}
+.profile-data {
+    margin-bottom: 1rem;
 }
 
 /* Not Found */ 

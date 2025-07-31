@@ -12,7 +12,7 @@ const NavBar = () => {
     return (
 
             <nav>
-                <img src="../../public/logo.png" alt="logo" />
+                <Link to={appRoutes.HOME}><img src="../../public/logo.png" alt="logo" /></Link>
                 <ul>
                     {jwtData ? (
                         <>
