@@ -5,7 +5,7 @@ import { useLoaderData } from 'react-router-dom';
 
 const Profile = () => {
     const { jwtData } = useAuth();
-    const userProfile = useLoaderData();
+    const [userProfile, setUserProfile] = useState(useLoaderData());
     const [userData, setUserData] = useState();
     const [editProfileState, setEditProfileState] = useState();
 
@@ -48,14 +48,44 @@ const Profile = () => {
 
 
     const editProfile = () => {
-        setEditProfileState('editMode')
-
+        setEditProfileState('editMode');
     }
 
-    // Todo...post request
-    const finishEditProfile = () => {
-        setEditProfileState(null)
+    const finishEditProfile = async (userData, userProfile) => {
 
+        try {
+            const response = await fetch('http://localhost:8000/api/v1/auth/user/edit/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtData.access}`,
+                },
+                body: JSON.stringify({
+                    user_id: userData.pk,
+                    profile_picture_url: userProfile.profile_picture_url,
+                    username: userData.username,
+                    first_name: userData.first_name,
+                    last_name: userData.last_name,
+                })
+
+
+            })
+
+            const data = await response.json();            
+            console.log(data);
+
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                return;
+            }
+
+            
+            setEditProfileState(null);
+        } catch (error) {
+            console.error(error);
+        }      
     }
 
     return (
@@ -76,14 +106,42 @@ const Profile = () => {
                                     <button onClick={editProfile}>Edit Profile</button>
                                 </div>
                                 :
-                                <form className="profile-data" onSubmit={finishEditProfile}>
-                                    <div class='flex-col'>
-                                        <label>Profile Picture</label>
-                                        <input name="" id="" value={userProfile.profile_picture_url} />
+                                <form className="profile-data" onSubmit={(e) => {e.preventDefault(); finishEditProfile(userData, userProfile)}}>
+                                    <div className='flex-col'>
+                                        <label htmlFor='profile_pic'>Profile Picture</label>
+                                        <input 
+                                            name='profile_pic' 
+                                            id="profile_pic" 
+                                            value={userProfile.profile_picture_url} 
+                                            onChange={(e) => setUserProfile({...userProfile, profile_picture_url: e.target.value})}
+                                        />
                                     </div>
-                                    <div class='flex-col'>
-                                        <label for='username'>User Name:</label>
-                                        <input name='username' id="username" value={userData.username} />
+                                    <div className='flex-col'>
+                                        <label htmlFor='username'>User Name:</label>
+                                        <input 
+                                            name='username' 
+                                            id="username" 
+                                            value={userData.username}
+                                            onChange={(e) => setUserData({...userData, username: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className='flex-col'>
+                                        <label htmlFor='first_name'>First Name:</label>
+                                        <input 
+                                            name='first_name' 
+                                            id="first_name" 
+                                            value={userData.first_name}
+                                            onChange={(e) => setUserData({...userData, first_name: e.target.value})}
+                                        />
+                                    </div>
+                                    <div className='flex-col'>
+                                        <label htmlFor='last_name'>Last Name:</label>
+                                        <input 
+                                            name='last_name' 
+                                            id="last_name" 
+                                            value={userData.last_name} 
+                                            onChange={(e) => setUserData({...userData, last_name: e.target.value})}
+                                        />
                                     </div>
                                     <button type='submit'>Submit</button>
                                 </form>

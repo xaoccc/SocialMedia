@@ -61,6 +61,7 @@ h1 {
     font-size: 3.2em;
     line-height: 1.1;
     margin-bottom: 2rem;
+    text-align: center;
 }
 
 h2 {
@@ -85,6 +86,8 @@ input {
     padding: 0.6em 1.2em;
     font-size: 1.25em;
     border-radius: 8px;
+    width: 50vw;
+    max-width: 40rem;
 }
 
 .flex-row {
@@ -313,7 +316,11 @@ small {
 }
 
 /* Profile */
-
+.profile-data img {
+    max-width: 5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
 
 /* Not Found */ 
 .not-found-nav {

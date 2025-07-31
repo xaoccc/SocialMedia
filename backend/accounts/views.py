@@ -100,6 +100,26 @@ class UserView(APIView):
     def get(self, request, *args, **kwargs):
         User = get_user_model()
         current_user = User.objects.get(id=request.user)
-        print(current_user)
         serializer = UserSerializer(current_user, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UserEditView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        data = request.data.copy()
+        User = get_user_model()
+        user = User.objects.get(id=data['user_id'])
+        user.username = data['username']
+        user.first_name = data['first_name']
+        user.last_name = data['last_name']
+        profile = Profile.objects.get(user_id=data['user_id'])
+        profile.profile_picture_url = data['profile_picture_url']
+        user.save()
+        profile.save()   
+
+
+        return Response(data, status=status.HTTP_201_CREATED)
+
+
+
