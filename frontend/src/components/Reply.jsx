@@ -48,7 +48,7 @@ export default function Reply({ commentId, userProfile, onRepliesUpdate }) {
 
 
             <form className="new-reply flex-row" onSubmit={handleNewReply}>
-                <img src={userProfile.profile_picture_url} />
+                <img className='profile-pic' src={userProfile.profile_picture_url} />
                 <textarea
                     rows="4"
                     name="new-reply"

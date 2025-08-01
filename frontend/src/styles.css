@@ -134,6 +134,8 @@ form.new-comment {
 
 .new-comment img, .profile-pic {
     width: 2.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
 }
 
 /* Posted Comments */

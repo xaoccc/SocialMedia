@@ -1,5 +1,6 @@
 # DjangoRestReactGoogleAuth
 A social network with, called KYP (Keep Yourself Positive)
+
 1. Main features:
     - Authentication and authorization, also with google
     - Write, edit and delete comments and replies
@@ -36,7 +37,6 @@ A social network with, called KYP (Keep Yourself Positive)
     1.2. Front-End  
     - Add VITE_GOOGLE_OAUTH_CLIENT_ID in the .env file
 
-
 4. Run  
     1.1. Backend  
     - Run new terminal in the backend dir  
@@ -52,6 +52,9 @@ Notes to self:
 - Improve validation and security
 - fix `hook.js:608 No HydrateFallback element provided` error
 - Improve CSS
+
+5. Screenshots:
+![alt text](image.png)
 
 
 
