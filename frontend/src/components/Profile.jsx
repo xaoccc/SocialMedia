@@ -2,12 +2,19 @@ import NavBar from './NavBar.jsx';
 import { useAuth } from '../context/AuthContext';
 import React, { useEffect, useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
+import ErrorMsg from './Errormsg.jsx';
 
 const Profile = () => {
     const { jwtData } = useAuth();
     const [userProfile, setUserProfile] = useState(useLoaderData());
     const [userData, setUserData] = useState();
     const [editProfileState, setEditProfileState] = useState();
+    const [validateFormFields, setValidateFormFields] = useState({
+        profilePictureURL: true, 
+        username: true,
+        firstName: true,
+        lastName: true
+    });
 
     useEffect(() => {
     }, [jwtData]);
@@ -97,7 +104,7 @@ const Profile = () => {
                         {
                             (!editProfileState) ?
                                 <div className="profile-data">
-                                    <img src={userProfile.profile_picture_url} alt='profile picture' />
+                                    <img src={userProfile.profile_picture_url} alt='profile picture' />                                    
                                     <p><span>User Name:</span><span>{userData ? userData.username : null}</span></p>
                                     <p><span>Email Address:</span><span>{userData ? userData.email : null}</span></p>
                                     <p><span>First Name:</span><span>{userData ? userData.first_name : null}</span></p>
@@ -112,9 +119,15 @@ const Profile = () => {
                                             name='profile_pic' 
                                             id="profile_pic" 
                                             value={userProfile.profile_picture_url} 
-                                            onChange={(e) => setUserProfile({...userProfile, profile_picture_url: e.target.value})}
+                                            onChange={(e) => {
+                                                setUserProfile({...userProfile, profile_picture_url: e.target.value});                                                
+                                                setValidateFormFields(prev => ({...prev, profilePictureURL: false}))
+                                               }}
+                                            
                                         />
                                     </div>
+                                    <ErrorMsg fieldName={'email'} fieldValue={(userProfile) ? userProfile.profile_picture_url : null } validateInput={validateFormFields.profilePictureURL}></ErrorMsg>
+                                    
                                     <div className='flex-col'>
                                         <label htmlFor='username'>User Name:</label>
                                         <input 
