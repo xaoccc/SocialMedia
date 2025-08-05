@@ -2,10 +2,11 @@ const ErrorMsg = ({fieldName, fieldValue, validateInput }) => {
     let fieldValueValidate = '';
     if (fieldName == 'email') {
         fieldValueValidate = ["http://", "https://"].some(prefix => fieldValue.startsWith(prefix));
+    } else if (fieldName == 'name') {
+        fieldValueValidate = /^[A-Z]{1}[a-z]+$/.test(fieldValue);
     } else {
         fieldValueValidate = fieldValue.startsWith('');
-    }
-    
+    }    
 
     return (
         <div className="error-container">

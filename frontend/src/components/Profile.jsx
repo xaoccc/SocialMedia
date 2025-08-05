@@ -121,7 +121,7 @@ const Profile = () => {
                                             value={userProfile.profile_picture_url} 
                                             onChange={(e) => {
                                                 setUserProfile({...userProfile, profile_picture_url: e.target.value});                                                
-                                                setValidateFormFields(prev => ({...prev, profilePictureURL: false}))
+                                                setValidateFormFields(prev => ({...prev, profilePictureURL: false}));
                                                }}
                                             
                                         />
@@ -143,18 +143,28 @@ const Profile = () => {
                                             name='first_name' 
                                             id="first_name" 
                                             value={userData.first_name}
-                                            onChange={(e) => setUserData({...userData, first_name: e.target.value})}
+                                            onChange={(e) => {
+                                                setUserData({...userData, first_name: e.target.value});
+                                                setValidateFormFields(prev => ({...prev, firstName: false}));
+                                            }}
                                         />
                                     </div>
+                                    <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.first_name : null } validateInput={validateFormFields.firstName}></ErrorMsg>
+
                                     <div className='flex-col'>
                                         <label htmlFor='last_name'>Last Name:</label>
                                         <input 
                                             name='last_name' 
                                             id="last_name" 
                                             value={userData.last_name} 
-                                            onChange={(e) => setUserData({...userData, last_name: e.target.value})}
+                                            onChange={(e) => {
+                                                setUserData({...userData, last_name: e.target.value});
+                                                setValidateFormFields(prev => ({...prev, lastName: false}));
+                                            }}
                                         />
                                     </div>
+                                    <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.last_name : null } validateInput={validateFormFields.lastName}></ErrorMsg>
+
                                     <button type='submit'>Submit</button>
                                 </form>
                         }
