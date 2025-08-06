@@ -1,12 +1,18 @@
-const ErrorMsg = ({fieldName, fieldValue, validateInput }) => {
-    let fieldValueValidate = '';
-    if (fieldName == 'email') {
-        fieldValueValidate = ["http://", "https://"].some(prefix => fieldValue.startsWith(prefix));
-    } else if (fieldName == 'name') {
-        fieldValueValidate = /^[A-Z]{1}[a-z]+$/.test(fieldValue);
-    } else {
-        fieldValueValidate = fieldValue.startsWith('');
-    }    
+const ErrorMsg = ({ fieldName, fieldValue, validateInput }) => {
+    // let fieldValueValidate = '';
+    let fieldValueValidate = false;
+
+    const isValid = (fieldName, fieldValue) => {
+        if (fieldName == 'email') {
+            fieldValueValidate = ["http://", "https://"].some(prefix => fieldValue.startsWith(prefix));
+        } else if (fieldName == 'name') {
+            fieldValueValidate = /^[A-Z]{1}[a-z]+$/.test(fieldValue);
+        } else {
+            fieldValueValidate = fieldValue.startsWith('');
+        }
+    }
+
+    isValid(fieldName, fieldValue)
 
     return (
         <div className="error-container">

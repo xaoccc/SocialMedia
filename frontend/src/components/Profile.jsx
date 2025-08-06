@@ -10,11 +10,12 @@ const Profile = () => {
     const [userData, setUserData] = useState();
     const [editProfileState, setEditProfileState] = useState();
     const [validateFormFields, setValidateFormFields] = useState({
-        profilePictureURL: true, 
+        profilePictureURL: true,
         username: true,
         firstName: true,
         lastName: true
     });
+
 
     useEffect(() => {
     }, [jwtData]);
@@ -26,7 +27,6 @@ const Profile = () => {
     useEffect(() => {
         const getUserData = async () => {
             // e.preventDefault();
-
             try {
                 const response = await fetch('http://localhost:8000/api/v1/auth/user/', {
                     method: 'GET',
@@ -50,7 +50,6 @@ const Profile = () => {
         }
         getUserData();
 
-
     }, []);
 
 
@@ -58,40 +57,68 @@ const Profile = () => {
         setEditProfileState('editMode');
     }
 
+    const isValid = (fieldName, fieldValue) => {
+        if (fieldName == 'email') {
+            return ["http://", "https://"].some(prefix => fieldValue.startsWith(prefix));
+        } else if (fieldName == 'firstName' || fieldName == 'lastName') {
+            return /^[A-Z]{1}[a-z]+$/.test(fieldValue);
+        } else {
+            return true;
+        }
+    }
+
     const finishEditProfile = async (userData, userProfile) => {
 
-        try {
-            const response = await fetch('http://localhost:8000/api/v1/auth/user/edit/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${jwtData.access}`,
-                },
-                body: JSON.stringify({
-                    profile_picture_url: userProfile.profile_picture_url,
-                    username: userData.username,
-                    first_name: userData.first_name,
-                    last_name: userData.last_name,
+        let formValues = {
+            'imageURL': userProfile.profile_picture_url,
+            'username': userData.username,
+            'firstName': userData.first_name,
+            'lastName': userData.last_name
+        };
+
+        let valid = true;
+        Object.keys(formValues).forEach((el) => {
+            isValid(el, formValues[el])
+            
+            if (!isValid(el, formValues[el])) {
+                valid = false;
+            }
+        })
+
+        if (valid) {
+
+            try {
+                const response = await fetch('http://localhost:8000/api/v1/auth/user/edit/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${jwtData.access}`,
+                    },
+                    body: JSON.stringify({
+                        profile_picture_url: userProfile.profile_picture_url,
+                        username: userData.username,
+                        first_name: userData.first_name,
+                        last_name: userData.last_name,
+                    })
+
+
                 })
 
+                const data = await response.json();
 
-            })
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData);
+                    return;
+                }
 
-            const data = await response.json();            
-            console.log(data);
-
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error('Error:', errorData);
-                return;
+                setEditProfileState(null);
+            } catch (error) {
+                console.error(error);
             }
-
-            
-            setEditProfileState(null);
-        } catch (error) {
-            console.error(error);
-        }      
+        } else {
+            console.log('Invalid input!')
+        }
     }
 
     return (
@@ -104,7 +131,7 @@ const Profile = () => {
                         {
                             (!editProfileState) ?
                                 <div className="profile-data">
-                                    <img src={userProfile.profile_picture_url} alt='profile picture' />                                    
+                                    <img src={userProfile.profile_picture_url} alt='profile picture' />
                                     <p><span>User Name:</span><span>{userData ? userData.username : null}</span></p>
                                     <p><span>Email Address:</span><span>{userData ? userData.email : null}</span></p>
                                     <p><span>First Name:</span><span>{userData ? userData.first_name : null}</span></p>
@@ -112,58 +139,58 @@ const Profile = () => {
                                     <button onClick={editProfile}>Edit Profile</button>
                                 </div>
                                 :
-                                <form className="profile-data" onSubmit={(e) => {e.preventDefault(); finishEditProfile(userData, userProfile)}}>
+                                <form className="profile-data" onSubmit={(e) => { e.preventDefault(); finishEditProfile(userData, userProfile) }}>
                                     <div className='flex-col'>
                                         <label htmlFor='profile_pic'>Profile Picture</label>
-                                        <input 
-                                            name='profile_pic' 
-                                            id="profile_pic" 
-                                            value={userProfile.profile_picture_url} 
+                                        <input
+                                            name='profile_pic'
+                                            id="profile_pic"
+                                            value={userProfile.profile_picture_url}
                                             onChange={(e) => {
-                                                setUserProfile({...userProfile, profile_picture_url: e.target.value});                                                
-                                                setValidateFormFields(prev => ({...prev, profilePictureURL: false}));
-                                               }}
-                                            
+                                                setUserProfile({ ...userProfile, profile_picture_url: e.target.value });
+                                                setValidateFormFields(prev => ({ ...prev, profilePictureURL: false }));
+                                            }}
+
                                         />
                                     </div>
-                                    <ErrorMsg fieldName={'email'} fieldValue={(userProfile) ? userProfile.profile_picture_url : null } validateInput={validateFormFields.profilePictureURL}></ErrorMsg>
-                                    
+                                    <ErrorMsg fieldName={'email'} fieldValue={(userProfile) ? userProfile.profile_picture_url : null} validateInput={validateFormFields.profilePictureURL}></ErrorMsg>
+
                                     <div className='flex-col'>
                                         <label htmlFor='username'>User Name:</label>
-                                        <input 
-                                            name='username' 
-                                            id="username" 
+                                        <input
+                                            name='username'
+                                            id="username"
                                             value={userData.username}
-                                            onChange={(e) => setUserData({...userData, username: e.target.value})}
+                                            onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                                         />
                                     </div>
                                     <div className='flex-col'>
                                         <label htmlFor='first_name'>First Name:</label>
-                                        <input 
-                                            name='first_name' 
-                                            id="first_name" 
+                                        <input
+                                            name='first_name'
+                                            id="first_name"
                                             value={userData.first_name}
                                             onChange={(e) => {
-                                                setUserData({...userData, first_name: e.target.value});
-                                                setValidateFormFields(prev => ({...prev, firstName: false}));
+                                                setUserData({ ...userData, first_name: e.target.value });
+                                                setValidateFormFields(prev => ({ ...prev, firstName: false }));
                                             }}
                                         />
                                     </div>
-                                    <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.first_name : null } validateInput={validateFormFields.firstName}></ErrorMsg>
+                                    <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.first_name : null} validateInput={validateFormFields.firstName}></ErrorMsg>
 
                                     <div className='flex-col'>
                                         <label htmlFor='last_name'>Last Name:</label>
-                                        <input 
-                                            name='last_name' 
-                                            id="last_name" 
-                                            value={userData.last_name} 
+                                        <input
+                                            name='last_name'
+                                            id="last_name"
+                                            value={userData.last_name}
                                             onChange={(e) => {
-                                                setUserData({...userData, last_name: e.target.value});
-                                                setValidateFormFields(prev => ({...prev, lastName: false}));
+                                                setUserData({ ...userData, last_name: e.target.value });
+                                                setValidateFormFields(prev => ({ ...prev, lastName: false }));
                                             }}
                                         />
                                     </div>
-                                    <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.last_name : null } validateInput={validateFormFields.lastName}></ErrorMsg>
+                                    <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.last_name : null} validateInput={validateFormFields.lastName}></ErrorMsg>
 
                                     <button type='submit'>Submit</button>
                                 </form>
