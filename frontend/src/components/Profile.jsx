@@ -150,7 +150,7 @@ const Profile = () => {
                                                 setUserProfile({ ...userProfile, profile_picture_url: e.target.value });
                                                 setValidateFormFields(prev => ({ ...prev, profilePictureURL: false }));
                                             }}
-
+                                            required
                                         />
                                     </div>
                                     <ErrorMsg fieldName={'email'} fieldValue={(userProfile) ? userProfile.profile_picture_url : null} validateInput={validateFormFields.profilePictureURL}></ErrorMsg>
@@ -162,6 +162,7 @@ const Profile = () => {
                                             id="username"
                                             value={userData.username}
                                             onChange={(e) => setUserData({ ...userData, username: e.target.value })}
+                                            required
                                         />
                                     </div>
                                     <div className='flex-col'>
@@ -174,6 +175,7 @@ const Profile = () => {
                                                 setUserData({ ...userData, first_name: e.target.value });
                                                 setValidateFormFields(prev => ({ ...prev, firstName: false }));
                                             }}
+                                            required
                                         />
                                     </div>
                                     <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.first_name : null} validateInput={validateFormFields.firstName}></ErrorMsg>
@@ -188,6 +190,7 @@ const Profile = () => {
                                                 setUserData({ ...userData, last_name: e.target.value });
                                                 setValidateFormFields(prev => ({ ...prev, lastName: false }));
                                             }}
+                                            required
                                         />
                                     </div>
                                     <ErrorMsg fieldName={'name'} fieldValue={(userData) ? userData.last_name : null} validateInput={validateFormFields.lastName}></ErrorMsg>
