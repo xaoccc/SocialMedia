@@ -10,20 +10,20 @@ A social network with, called KYP (Keep Yourself Positive)
 
 2. Install 
     Assuming you have Python, Node.js, PostgreSQL, some IDE, working with both Python and JavaScript(for example VS Code) and a database client, like PGadmin. 
-    1.1. Backend  
+    2.1. Backend  
     - Run new terminal in the main dir AND  
     - Create new virtual environment: `py -m venv venv`
     - Activate the backend environment: `./venv/Scripts/activate`
     - Install dependencies: `pip install -r requirements.txt`
     - OR install manually each dependence from requirements.txt into your current virtual environment(not recommended)  
 
-    1.2. Front-End  
+    2.2. Front-End  
     - Run new terminal in the frontend dir
     - Install dependencies: `npm i`
 
 3. Setup
     Create a google client ID in the google cloud console. Make sure GOOGLE_OAUTH_CALLBACK_URL from the .env file is there.  
-    1.1. Backend:  
+    3.1. Backend:  
     add the appropriate data in the .env file:
     - SECRET_KEY
     - DB_NAME
@@ -37,19 +37,19 @@ A social network with, called KYP (Keep Yourself Positive)
     - EMAIL_HOST_PASSWORD
     - EMAIL_HOST_USER
 
-    1.2. Front-End  
+    3.2. Front-End  
     - Add VITE_GOOGLE_OAUTH_CLIENT_ID in the .env file
 
 4. Run 
 
     4.1. Locally  
 
-    1.1. Backend  
+    4.1.1. Backend  
     - Run new terminal in the backend dir  
     - Migrate the database: `py manage.py migrate`
     - Run the backend server: `py manage.py runserver`
 
-    1.2. Front-End  
+    4.1.2. Front-End  
     - Use the open terminal in the frontend dir
     - Run the front-end server: `npm run dev` 
 
