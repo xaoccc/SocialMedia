@@ -16,7 +16,6 @@ const Profile = () => {
         lastName: true
     });
 
-
     useEffect(() => {
     }, [jwtData]);
 
@@ -51,7 +50,6 @@ const Profile = () => {
         getUserData();
 
     }, []);
-
 
     const editProfile = () => {
         setEditProfileState('editMode');
@@ -100,8 +98,6 @@ const Profile = () => {
                         first_name: userData.first_name,
                         last_name: userData.last_name,
                     })
-
-
                 })
 
                 const data = await response.json();

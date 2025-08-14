@@ -1,5 +1,4 @@
 const ErrorMsg = ({ fieldName, fieldValue, validateInput }) => {
-    // let fieldValueValidate = '';
     let fieldValueValidate = false;
 
     const isValid = (fieldName, fieldValue) => {
